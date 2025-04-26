@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Word Shadowing</string>
+    <string name="menu">Menu</string>
+    <string name="create_word">Create Word List</string>
+    <string name="load_word">Load Word List</string>
+    <string name="please_input_word">Enter a word</string>
+    <string name="please_input_chinese">Enter Chinese translation</string>
+    <string name="save">Save</string>
+    <string name="add_more_word">Add More Words</string>
+    <string name="expand">Expand</string>
+    <string name="change_to_vocab">Switch to this List</string>
+    <string name="please_input_vocab_name">Enter list name</string>
+    <string name="save_success">Saved successfully!</string>
+    <string name="tts_data_error">TTS engine unavailable or data missing!</string>
+    <string name="tts_error">TTS initialization failed!</string>
+    <string name="speak_speed_ratio">Speech Rate</string>
+    <string name="export_vocab">Export Word List</string>
+    <string name="speak_chinese">朗读中文</string>
+</resources>

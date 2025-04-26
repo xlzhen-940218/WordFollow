@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_speak_chinese"
+        android:title="@string/speak_chinese"
+        android:checkable="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_translate"
+        android:checked="true"/>
+    <item
+        android:id="@+id/action_create"
+        android:title="@string/create_word"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_word_add"/>
+
+    <item
+        android:id="@+id/action_load"
+        android:title="@string/load_word"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_word_load"/>
+</menu>

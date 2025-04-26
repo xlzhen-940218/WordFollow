@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">单词跟读</string>
+    <string name="menu">菜单</string>
+    <string name="create_word">创建单词表</string>
+    <string name="load_word">加载单词表</string>
+    <string name="please_input_word">请输入单词</string>
+    <string name="please_input_chinese">请输入对应中文</string>
+    <string name="save">保存</string>
+    <string name="add_more_word">添加更多单词</string>
+    <string name="expand">展开</string>
+    <string name="change_to_vocab">切换到该单词表</string>
+    <string name="please_input_vocab_name">请输入单词表名称</string>
+    <string name="save_success">保存成功！</string>
+    <string name="tts_data_error">语音引擎不支持或数据缺失!</string>
+    <string name="tts_error">语音引擎初始化失败!</string>
+    <string name="speak_speed_ratio">语速调整</string>
+    <string name="export_vocab">导出单词表</string>
+    <string name="speak_chinese">朗读中文</string>
+</resources>

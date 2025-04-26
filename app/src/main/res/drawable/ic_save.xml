@@ -1,0 +1,51 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+
+    <path
+        android:fillColor="#3678BF"
+        android:pathData="M834.1,146H189.9c-25.4,0 -46,25.3 -46,56.5v588.6L223.6,880h610.5c25.4,0 46,-25.3 46,-56.5V202.5c0,-31.2 -20.6,-56.5 -46,-56.5z" />
+
+    <path
+        android:fillColor="#707272"
+        android:pathData="M172,207.2h40.7V264H172z" />
+
+    <path
+        android:fillColor="#A5A5A5"
+        android:pathData="M174,231h36.7v30.8H174z" />
+
+    <path
+        android:fillColor="#245B8E"
+        android:pathData="M258,356.8v157c0,14.5 8.6,26.2 19.3,26.2h501.4c10.7,0 19.3,-11.7 19.3,-26.2V356.8h-540zM782,866.4V660.3c0,-19 -7.9,-34.3 -17.5,-34.3H308.5c-9.7,0 -17.5,15.4 -17.5,34.3v206h491.1z" />
+
+    <path
+        android:fillColor="#EAEAEA"
+        android:pathData="M680,866.4V668.9c0,-18.2 -6.1,-32.9 -13.7,-32.9H311.2c-7.5,0 -13.7,14.7 -13.7,32.9v197.4H680z" />
+
+    <path
+        android:fillColor="#A5A5A5"
+        android:pathData="M436.4,818V677.4c0,-12.9 -1.6,-23.4 -3.6,-23.4H339c-2,0 -3.6,10.5 -3.6,23.4v140.6h101z" />
+
+    <path
+        android:fillColor="#878787"
+        android:pathData="M432.8,654h-22.4v137.3h-75v26.7h101V677.4c0,-12.9 -1.6,-23.4 -3.6,-23.4z" />
+
+    <path
+        android:fillColor="#EAEAEA"
+        android:pathData="M296.6,364.8V489.4c0,17.2 17.3,31.2 38.6,31.2h385.7c21.3,0 38.6,-14 38.6,-31.2V364.8H296.6z" />
+
+    <path
+        android:fillColor="#245B8E"
+        android:pathData="M258,153.6v224.9c0,20.7 8.6,37.5 19.3,37.5h501.4c10.7,0 19.3,-16.8 19.3,-37.5V153.6h-540z" />
+
+    <path
+        android:fillColor="#EAEAEA"
+        android:pathData="M296.6,153.6v256.3c0,35.4 17.3,64.1 38.6,64.1h385.7c21.3,0 38.6,-28.7 38.6,-64.1V153.6H296.6z" />
+
+    <path
+        android:fillColor="#ACB8BC"
+        android:pathData="M324,249.5h408v6.7h-408zM320.9,299.2h408v6.7h-408zM320.9,348.9h408v6.7h-408zM320.9,398.7h408v6.7h-408zM320.9,448.4h408v6.7h-408z" />
+
+</vector>

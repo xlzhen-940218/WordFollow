@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="md_theme_light_primary">#FF7EBAB5</color>
+    <color name="md_theme_light_onPrimary">#FFFFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#FF5EBAB5</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="background_gray">#F5F5F5</color>
+    <color name="text_primary">#1C1B1F</color>
+    <color name="gray_8">#888888</color>
+    <color name="gray_a">#aaaaaa</color>
+
+    <color name="dark_blue">#00008B</color>
+</resources>

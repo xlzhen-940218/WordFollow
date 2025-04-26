@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 匹配 /storage/emulated/0/Android/data/{package}/files/ 下的所有子目录 -->
+    <external-files-path
+        name="external_files"
+        path="." />  <!-- path="." 表示根目录（即 files/） -->
+</paths>
