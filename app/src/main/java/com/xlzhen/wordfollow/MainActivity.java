@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, R.string.tts_error, Toast.LENGTH_SHORT).show();
                 }
             }
-        }, "com.iflytek.speechsuite");
+        });
 
         textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
@@ -206,7 +206,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (pause) {
             pause = false;
-            speak(true, model.getWordModels().get(currentSpeakIndex).getWord());
+            if(model!=null&& model.getWordModels()!=null) {
+                speak(true, model.getWordModels().get(currentSpeakIndex).getWord());
+            }
         }
     }
 }
