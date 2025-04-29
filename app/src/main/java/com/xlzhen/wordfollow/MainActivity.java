@@ -49,12 +49,7 @@ public class MainActivity extends AppCompatActivity {
             endUtteranceId = UUID.randomUUID().toString();
             textAdapter.setSelectedPosition(currentSpeakIndex);
         }
-        getWindow().getDecorView().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, start ? startUtteranceId : endUtteranceId);
-            }
-        }, 2000);
+        getWindow().getDecorView().postDelayed(() -> textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, start ? startUtteranceId : endUtteranceId), start ? 2000 : 1000);
 
     }
 
@@ -137,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (model != null) {
                         if (MainActivity.this.firstUtteranceId.equals(utteranceId)) {
+                            firstUtteranceId = "";
                             speak(true, model.getWordModels().get(currentSpeakIndex).getWord());
                         } else if (MainActivity.this.startUtteranceId.equals(utteranceId)) {
                             speak(false, model.getWordModels().get(currentSpeakIndex).getChinese());
@@ -216,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (pause) {
             pause = false;
-            if (model != null && model.getWordModels() != null) {
+            if (model != null && model.getWordModels() != null && firstUtteranceId.isEmpty()) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 speak(true, model.getWordModels().get(currentSpeakIndex).getWord());
             }
