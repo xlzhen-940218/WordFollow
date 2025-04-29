@@ -15,5 +15,6 @@
     <string name="tts_error">TTS initialization failed!</string>
     <string name="speak_speed_ratio">Speech Rate</string>
     <string name="export_vocab">Export Word List</string>
-    <string name="speak_chinese">朗读中文</string>
+    <string name="speak_chinese">Read Chinese aloud</string>
+    <string name="please_ready_speak">Please prepare to start reading English to me</string>
 </resources>

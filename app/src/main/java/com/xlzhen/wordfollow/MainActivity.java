@@ -1,11 +1,13 @@
 package com.xlzhen.wordfollow;
 
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -47,8 +49,13 @@ public class MainActivity extends AppCompatActivity {
             endUtteranceId = UUID.randomUUID().toString();
             textAdapter.setSelectedPosition(currentSpeakIndex);
         }
+        getWindow().getDecorView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, start ? startUtteranceId : endUtteranceId);
+            }
+        }, 2000);
 
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, start ? startUtteranceId : endUtteranceId);
     }
 
     @Override
@@ -77,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
                                 if (textAdapter.getItemCount() > 0) {
                                     currentSpeakIndex = 0;
                                 }
+                                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                                 model = wordListModel;
                                 textAdapter.setData(model.getWordModels());
-                                String speak = "请准备好开始跟我朗读英语";
+                                String speak = getString(R.string.please_ready_speak);
                                 firstUtteranceId = UUID.randomUUID().toString();
                                 textToSpeech.speak(speak, TextToSpeech.QUEUE_FLUSH, null, firstUtteranceId);
 
@@ -100,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
                     // 设置语言（例如：中文）
-                    int result = textToSpeech.setLanguage(Locale.CHINESE);
+                    int result = textToSpeech.setLanguage(Locale.US);
+
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Toast.makeText(MainActivity.this, R.string.tts_data_error, Toast.LENGTH_SHORT).show();
                         // 提示用户下载语言包
@@ -109,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(installIntent);
                     }
                     textToSpeech.setSpeechRate(1f); // 1.0 为正常速度
-                    textToSpeech.setPitch(1f);     // 1.0 为正常音调
+                    textToSpeech.setPitch(1.1f);     // 1.0 为正常音调
                 } else {
                     Toast.makeText(MainActivity.this, R.string.tts_error, Toast.LENGTH_SHORT).show();
                 }
@@ -198,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         pause = true;
     }
 
@@ -206,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (pause) {
             pause = false;
-            if(model!=null&& model.getWordModels()!=null) {
+            if (model != null && model.getWordModels() != null) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 speak(true, model.getWordModels().get(currentSpeakIndex).getWord());
             }
         }

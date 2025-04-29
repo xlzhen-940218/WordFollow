@@ -16,4 +16,5 @@
     <string name="speak_speed_ratio">语速调整</string>
     <string name="export_vocab">导出单词表</string>
     <string name="speak_chinese">朗读中文</string>
+    <string name="please_ready_speak">请准备好开始跟我朗读英语吧</string>
 </resources>
