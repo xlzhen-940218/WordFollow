@@ -10,8 +10,8 @@ android {
         applicationId = "com.xlzhen.wordfollow"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,5 +42,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
-    implementation("com.alibaba.fastjson2:fastjson2:2.0.57.android8")
+    implementation(libs.fastjson2)
 }

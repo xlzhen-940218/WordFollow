@@ -77,7 +77,7 @@ public class CreateVocabActivity extends AppCompatActivity {
         long id = 0;
         List<WordModel> validPairs = new ArrayList<>();
         for (WordPair pair : wordList) {
-            if (!pair.english.isEmpty() && !pair.chinese.isEmpty()) {
+            if (!pair.english.isEmpty() /*&& !pair.chinese.isEmpty()*/) {
                 validPairs.add(new WordModel(id, pair.english, pair.chinese));
                 id++;
             }
