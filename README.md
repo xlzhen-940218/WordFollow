@@ -39,7 +39,7 @@ WordFollow 是一款专为语言学习者打造的轻量级跟读应用，采用
 - 当前版本：v1.0.0.2
 - 开发者：xlzhen
 - [GitHub仓库](https://github.com/xlzhen-940218/WordFollow)
-- [APK Download](https://github.com/xlzhen-940218/WordFollow/releases/download/lts/app-release.apk)
+- [APK Download](https://github.com/xlzhen-940218/WordFollow/releases/download/1.0.0.2/app-release.apk)
 
 🔨 **开源协议**
 - 项目完全开源（MIT License）
