@@ -5,11 +5,13 @@ import android.content.Context;
 
 import com.alibaba.fastjson2.JSON;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -87,14 +89,20 @@ public class StorageUtils {
         if (!dataFile.exists()) {
             return null;
         }
-        StringBuilder json = new StringBuilder();
-        byte[] buffer = new byte[1024];
+        StringBuilder stringBuilder = new StringBuilder();
         try {
-            FileInputStream stream = new FileInputStream(dataFile);
-            while (stream.read(buffer) != -1) {
-                json.append(new String(buffer, StandardCharsets.UTF_8));
+            // 打开文件输入流
+            FileInputStream fis = new FileInputStream(dataFile.getAbsolutePath());
+            // 使用缓冲读取器
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
             }
-            return JSON.parseObject(json.toString(), cls);
+            // 关闭资源
+            fis.close();
+            bufferedReader.close();
+            return JSON.parseObject(stringBuilder.toString(), cls);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -108,18 +116,25 @@ public class StorageUtils {
         if (!dataFile.exists()) {
             return null;
         }
-        StringBuilder json = new StringBuilder();
-        byte[] buffer = new byte[1024];
+        StringBuilder stringBuilder = new StringBuilder();
         try {
-            FileInputStream stream = new FileInputStream(dataFile);
-            while (stream.read(buffer) != -1) {
-                json.append(new String(buffer, StandardCharsets.UTF_8));
+            // 打开文件输入流
+            FileInputStream fis = new FileInputStream(dataFile.getAbsolutePath());
+            // 使用缓冲读取器
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
             }
-            return JSON.parseObject(json.toString(), cls);
+            // 关闭资源
+            fis.close();
+            bufferedReader.close();
+            return JSON.parseObject(stringBuilder.toString(), cls);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+
     }
 
     public static byte[] getExternalFilesData(Context context, String key) {

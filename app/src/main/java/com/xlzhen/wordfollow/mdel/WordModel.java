@@ -17,11 +17,11 @@ public class WordModel {
     /**
      * 单词语音路径
      */
-    private String wordVoicePath;
+    private String wordVoicePath = "";
     /**
      * 中文语音路径
      */
-    private String chineseVoicePath;
+    private String chineseVoicePath = "";
 
     public WordModel() {
     }

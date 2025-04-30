@@ -18,5 +18,7 @@
     <string name="speak_chinese">Read Chinese aloud</string>
     <string name="please_ready_speak">Please prepare to start reading English to me</string>
     <string name="generate_voice">Generate voice</string>
-    <string name="generate_success">生成成功！</string>
+    <string name="generate_eng_success">English voice generated successfully!</string>
+    <string name="generate_chi_success">Chinese voice generated successfully!</string>
+    <string name="import_word_table">Import word table</string>
 </resources>

@@ -51,13 +51,17 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer mp;
 
-    public void audioPlayer(boolean start, String path) {
-        if(mp == null) {
+    private boolean playStart;
+
+    public void audioPlayer(String path) {
+
+        if (mp == null) {
             mp = new MediaPlayer();
             mp.setOnCompletionListener(mediaPlayer -> {
                 mp.stop();
-                if (start) {
-                    speak(false, model.getWordModels().get(currentSpeakIndex));
+                if (playStart) {
+                    playStart = false;
+                    speak( model.getWordModels().get(currentSpeakIndex));
                 } else {
                     if (currentSpeakIndex < model.getWordModels().size() - 1) {
                         currentSpeakIndex++;
@@ -65,25 +69,29 @@ public class MainActivity extends AppCompatActivity {
                         currentSpeakIndex = 0;
                     }
                     if (!pause) {
-                        speak(speakChinese, model.getWordModels().get(currentSpeakIndex));
+                        playStart = speakChinese;
+                        speak(model.getWordModels().get(currentSpeakIndex));
                     }
                 }
             });
         }
-        if(!mp.isPlaying()) {
-            try {
-                mp.setDataSource(path);
-                mp.prepare();
-                mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(speed));
-                mp.start();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
+        if(mp.isPlaying()){
+            return;
         }
+        try {
+            mp.reset();
+            mp.setDataSource(path);
+            mp.prepare();
+            mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(speed));
+            mp.start();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
-    private void speak(boolean start, WordModel wordModel) {
-        if (start || !speakChinese) {
+    private void speak(WordModel wordModel) {
+        if (playStart || !speakChinese) {
             startUtteranceId = UUID.randomUUID().toString();
             endUtteranceId = UUID.randomUUID().toString();
             textAdapter.setSelectedPosition(currentSpeakIndex);
@@ -91,13 +99,14 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (new File(start ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath()).exists()) {
-                    audioPlayer(start, start ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
+
+                if (new File(playStart ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath()).exists()) {
+                    audioPlayer( playStart ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
                 } else {
-                    textToSpeech.speak(start ? wordModel.getWord() : wordModel.getChinese(), TextToSpeech.QUEUE_FLUSH, null, start ? startUtteranceId : endUtteranceId);
+                    textToSpeech.speak(playStart ? wordModel.getWord() : wordModel.getChinese(), TextToSpeech.QUEUE_FLUSH, null, playStart ? startUtteranceId : endUtteranceId);
                 }
             }
-        }, start ? 2000 : 1000);
+        }, playStart ? 1000 : 500);
 
     }
 
@@ -181,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
                     if (model != null) {
                         if (MainActivity.this.firstUtteranceId.equals(utteranceId)) {
                             firstUtteranceId = "";
-                            speak(true, model.getWordModels().get(currentSpeakIndex));
+                            playStart = true;
+                            speak( model.getWordModels().get(currentSpeakIndex));
                         } else if (MainActivity.this.startUtteranceId.equals(utteranceId)) {
-                            speak(false, model.getWordModels().get(currentSpeakIndex));
+                            playStart = false;
+                            speak( model.getWordModels().get(currentSpeakIndex));
 
                         } else if (MainActivity.this.endUtteranceId.equals(utteranceId)) {
                             if (currentSpeakIndex < model.getWordModels().size() - 1) {
@@ -192,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
                                 currentSpeakIndex = 0;
                             }
                             if (!pause) {
-                                speak(speakChinese, model.getWordModels().get(currentSpeakIndex));
+                                playStart = speakChinese;
+                                speak(model.getWordModels().get(currentSpeakIndex));
                             }
                         }
                     }
@@ -263,7 +275,8 @@ public class MainActivity extends AppCompatActivity {
             pause = false;
             if (model != null && model.getWordModels() != null && firstUtteranceId.isEmpty()) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                speak(true, model.getWordModels().get(currentSpeakIndex));
+                playStart = true;
+                speak(model.getWordModels().get(currentSpeakIndex));
             }
         }
     }

@@ -1,23 +1,15 @@
 package com.xlzhen.wordfollow;
 
-import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -26,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xlzhen.edgetts.EdgeTTS;
+import com.alibaba.fastjson2.JSON;
 import com.xlzhen.wordfollow.adapter.WordAdapter;
 import com.xlzhen.wordfollow.mdel.WordListModel;
 import com.xlzhen.wordfollow.mdel.WordModel;
@@ -34,19 +26,68 @@ import com.xlzhen.wordfollow.mdel.WordPair;
 import com.xlzhen.wordfollow.utils.FileUidUtils;
 import com.xlzhen.wordfollow.utils.StorageUtils;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
-
-public class CreateVocabActivity extends AppCompatActivity {
+public class LoadByFileVocabActivity extends AppCompatActivity {
 
     private WordAdapter adapter;
     private List<WordPair> wordList = new ArrayList<>();
+    private EditText nameEditText;
+
+    private void parseAndDisplayJson(String json) {
+        if (json == null) {
+            Toast.makeText(this, "Failed to read JSON", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        WordListModel wordListModel = JSON.parseObject(json, WordListModel.class);
+        if (wordListModel != null && wordListModel.getTitle() != null) {
+            nameEditText.setText(wordListModel.getTitle());
+        }
+        if (wordListModel.getWordModels() != null && wordListModel.getWordModels().size() > 0) {
+            for (WordModel wordModel :
+                    wordListModel.getWordModels()) {
+                wordList.add(new WordPair(wordModel.getWord(), wordModel.getChinese(), "", ""));
+                adapter.notifyItemInserted(wordList.size() - 1);
+            }
+        }
+    }
+
+    private void handleSharedJson(Intent intent) {
+        Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (uri != null) {
+            String json = readJsonFromUri(uri);
+            parseAndDisplayJson(json);
+        }
+    }
+
+    private void handleViewJson(Uri uri) {
+        if (uri != null) {
+            String json = readJsonFromUri(uri);
+            parseAndDisplayJson(json);
+        }
+    }
+
+    private String readJsonFromUri(Uri uri) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (InputStream inputStream = getContentResolver().openInputStream(uri);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return stringBuilder.toString();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +99,7 @@ public class CreateVocabActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        nameEditText = findViewById(R.id.name_edit_text);
         // 初始化Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,18 +113,23 @@ public class CreateVocabActivity extends AppCompatActivity {
         adapter = new WordAdapter(wordList);
         recyclerView.setAdapter(adapter);
 
-        // 添加初始条目
-        wordList.add(new WordPair("", "", "", ""));
-        adapter.notifyItemInserted(0);
-
         // 添加按钮点击事件
         findViewById(R.id.btn_add).setOnClickListener(v -> {
-            wordList.add(new WordPair("", "","", ""));
+            wordList.add(new WordPair("", "", "", ""));
             adapter.notifyItemInserted(wordList.size() - 1);
         });
 
-        // 保存按钮点击事件
-        // findViewById(R.id.btn_save).setOnClickListener(v -> saveWordList());
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("application/json".equals(type)) {
+                handleSharedJson(intent); // 处理分享的JSON
+            }
+        } else if (Intent.ACTION_VIEW.equals(action)) {
+            handleViewJson(intent.getData()); // 处理直接打开的JSON文件
+        }
     }
 
     private void saveWordList() {
@@ -91,12 +137,12 @@ public class CreateVocabActivity extends AppCompatActivity {
         List<WordModel> validPairs = new ArrayList<>();
         for (WordPair pair : wordList) {
             if (!pair.english.isEmpty() /*&& !pair.chinese.isEmpty()*/) {
-                validPairs.add(new WordModel(id, pair.english, pair.chinese,pair.englishVoicePath,pair.chineseVoicePath));
+                validPairs.add(new WordModel(id, pair.english, pair.chinese, pair.englishVoicePath, pair.chineseVoicePath));
                 id++;
             }
         }
-        EditText editText = findViewById(R.id.name_edit_text);
-        String title = editText.getText().toString();
+
+        String title = nameEditText.getText().toString();
         if (title.isEmpty()) {
             Toast.makeText(this, R.string.please_input_vocab_name, Toast.LENGTH_SHORT).show();
             return;
@@ -114,11 +160,6 @@ public class CreateVocabActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
-
-
-
-
-
 
 
     @Override
