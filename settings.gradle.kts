@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "WordFollow"
 include(":app")
- 
+include(":edgetts")

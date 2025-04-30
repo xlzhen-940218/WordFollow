@@ -17,4 +17,6 @@
     <string name="export_vocab">Export Word List</string>
     <string name="speak_chinese">Read Chinese aloud</string>
     <string name="please_ready_speak">Please prepare to start reading English to me</string>
+    <string name="generate_voice">Generate voice</string>
+    <string name="generate_success">生成成功！</string>
 </resources>

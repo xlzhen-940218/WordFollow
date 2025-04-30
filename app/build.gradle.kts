@@ -43,4 +43,5 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation(libs.fastjson2)
+    implementation(project(":edgetts"))
 }

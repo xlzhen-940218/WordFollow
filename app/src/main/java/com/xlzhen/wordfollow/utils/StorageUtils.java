@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class StorageUtils {
     public static <T> void saveData(Context context, String key, T data) {
@@ -157,6 +158,12 @@ public class StorageUtils {
         if (!dataFile.exists()) {
             return null;
         }
+        return dataFile.getAbsolutePath();
+    }
+
+    public static String generateVoiceFilePath(Context context) {
+        File dataDir = context.getExternalFilesDir("voice");
+        File dataFile = new File(String.format("%s/%s", dataDir.getAbsolutePath(), UUID.randomUUID().toString()));
         return dataFile.getAbsolutePath();
     }
 
