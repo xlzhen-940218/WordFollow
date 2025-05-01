@@ -45,7 +45,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     }
 
     // 2. 统一处理逻辑的泛型方法
-    void handleTTS(Context context, String text, String existingPath, Consumer<String> pathSetter, @StringRes int errorRes) {
+    void handleTTS(Context context, boolean isEng, String text, String existingPath, Consumer<String> pathSetter, @StringRes int errorRes) {
         if (text.isEmpty()) {
             Toast.makeText(context, errorRes, Toast.LENGTH_SHORT).show();
             return;
@@ -57,7 +57,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         executor.execute(() -> {
             try {
                 String path = StorageUtils.generateVoiceFilePath(context);
-                path = EdgeTTS.textToMp3(text, path);
+                path = EdgeTTS.textToMp3(text, path, isEng ? EdgeTTS.XIAO_YI : EdgeTTS.YUN_YANG);
 
                 if (new File(path).exists()) {
                     String finalPath = path;
@@ -98,20 +98,20 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             final WordPair item = data.get(safePosition);
 
             // 4. 并行处理中英文语音生成
-            handleTTS(v.getContext(), item.english, item.englishVoicePath,
+            handleTTS(v.getContext(), true, item.english, item.englishVoicePath,
                     path -> {
                         item.englishVoicePath = path;
                         Toast.makeText(v.getContext(), R.string.generate_eng_success, Toast.LENGTH_SHORT).show();
-                        if(!item.chineseVoicePath.isEmpty()){
+                        if (!item.chineseVoicePath.isEmpty()) {
                             v.setVisibility(View.GONE);
                         }
                     }, R.string.please_input_word);
 
-            handleTTS(v.getContext(), item.chinese, item.chineseVoicePath,
+            handleTTS(v.getContext(), false, item.chinese, item.chineseVoicePath,
                     path -> {
                         item.chineseVoicePath = path;
                         Toast.makeText(v.getContext(), R.string.generate_chi_success, Toast.LENGTH_SHORT).show();
-                        if(!item.englishVoicePath.isEmpty()){
+                        if (!item.englishVoicePath.isEmpty()) {
                             v.setVisibility(View.GONE);
                         }
                     }, R.string.please_input_chinese);
