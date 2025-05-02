@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         currentSpeakIndex = 0;
                     }
                     if (!pause) {
-                        playStart = speakChinese;
+                        playStart = true;
                         speak(model.getWordModels().get(currentSpeakIndex));
                     }
                 }
@@ -100,13 +100,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (new File(playStart ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath()).exists()) {
-                    audioPlayer( playStart ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
+                if (new File(playStart || !speakChinese ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath()).exists()) {
+                    audioPlayer( playStart || !speakChinese ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
                 } else {
-                    textToSpeech.speak(playStart ? wordModel.getWord() : wordModel.getChinese(), TextToSpeech.QUEUE_FLUSH, null, playStart ? startUtteranceId : endUtteranceId);
+                    textToSpeech.speak(playStart || !speakChinese ? wordModel.getWord() : wordModel.getChinese(), TextToSpeech.QUEUE_FLUSH, null, playStart ? startUtteranceId : endUtteranceId);
                 }
             }
-        }, playStart ? 1000 : 500);
+        }, playStart || !speakChinese ? 1000 : 500);
 
     }
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                                 currentSpeakIndex = 0;
                             }
                             if (!pause) {
-                                playStart = speakChinese;
+                                playStart = true;
                                 speak(model.getWordModels().get(currentSpeakIndex));
                             }
                         }
