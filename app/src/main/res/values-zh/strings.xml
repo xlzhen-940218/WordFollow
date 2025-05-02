@@ -21,4 +21,7 @@
     <string name="generate_eng_success">英文语音生成成功！</string>
     <string name="generate_chi_success">中文语音生成成功！</string>
     <string name="import_word_table">导入字典表</string>
+    <string name="loop">循环</string>
+    <string name="hello">Hello</string>
+    <string name="unloop">取消循环</string>
 </resources>

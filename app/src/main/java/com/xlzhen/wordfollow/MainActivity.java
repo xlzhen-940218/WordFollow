@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> launcher;
     TextAdapter textAdapter;
     private int currentSpeakIndex;
+    private int loopSpeakIndex = -1;
     private String firstUtteranceId;
     private String startUtteranceId;
     private String endUtteranceId;
@@ -61,12 +62,16 @@ public class MainActivity extends AppCompatActivity {
                 mp.stop();
                 if (playStart) {
                     playStart = false;
-                    speak( model.getWordModels().get(currentSpeakIndex));
+                    speak(model.getWordModels().get(currentSpeakIndex));
                 } else {
-                    if (currentSpeakIndex < model.getWordModels().size() - 1) {
-                        currentSpeakIndex++;
+                    if (loopSpeakIndex != -1) {
+                        currentSpeakIndex = loopSpeakIndex;
                     } else {
-                        currentSpeakIndex = 0;
+                        if (currentSpeakIndex < model.getWordModels().size() - 1) {
+                            currentSpeakIndex++;
+                        } else {
+                            currentSpeakIndex = 0;
+                        }
                     }
                     if (!pause) {
                         playStart = true;
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        if(mp.isPlaying()){
+        if (mp.isPlaying()) {
             return;
         }
         try {
@@ -101,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 if (new File(playStart || !speakChinese ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath()).exists()) {
-                    audioPlayer( playStart || !speakChinese ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
+                    audioPlayer(playStart || !speakChinese ? wordModel.getWordVoicePath() : wordModel.getChineseVoicePath());
                 } else {
                     textToSpeech.speak(playStart || !speakChinese ? wordModel.getWord() : wordModel.getChinese(), TextToSpeech.QUEUE_FLUSH, null, playStart ? startUtteranceId : endUtteranceId);
                 }
@@ -151,7 +156,16 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        textAdapter = new TextAdapter(new ArrayList<>());
+        textAdapter = new TextAdapter(new ArrayList<>(), new TextAdapter.LoopClickListener() {
+            @Override
+            public void onClick(int position, boolean loop) {
+                if(loop) {
+                    loopSpeakIndex = position;
+                }else{
+                    loopSpeakIndex = -1;
+                }
+            }
+        });
         recyclerView.setAdapter(textAdapter);
 
         // 初始化 TTS
@@ -191,16 +205,20 @@ public class MainActivity extends AppCompatActivity {
                         if (MainActivity.this.firstUtteranceId.equals(utteranceId)) {
                             firstUtteranceId = "";
                             playStart = true;
-                            speak( model.getWordModels().get(currentSpeakIndex));
+                            speak(model.getWordModels().get(currentSpeakIndex));
                         } else if (MainActivity.this.startUtteranceId.equals(utteranceId)) {
                             playStart = false;
-                            speak( model.getWordModels().get(currentSpeakIndex));
+                            speak(model.getWordModels().get(currentSpeakIndex));
 
                         } else if (MainActivity.this.endUtteranceId.equals(utteranceId)) {
-                            if (currentSpeakIndex < model.getWordModels().size() - 1) {
-                                currentSpeakIndex++;
+                            if (loopSpeakIndex != -1) {
+                                currentSpeakIndex = loopSpeakIndex;
                             } else {
-                                currentSpeakIndex = 0;
+                                if (currentSpeakIndex < model.getWordModels().size() - 1) {
+                                    currentSpeakIndex++;
+                                } else {
+                                    currentSpeakIndex = 0;
+                                }
                             }
                             if (!pause) {
                                 playStart = true;

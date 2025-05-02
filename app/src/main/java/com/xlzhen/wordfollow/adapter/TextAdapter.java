@@ -18,9 +18,17 @@ import java.util.List;
 public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     private List<WordModel> items;
     private int selectedPosition = -1;
+    private boolean loop = false;
 
-    public TextAdapter(List<WordModel> items) {
+    public interface LoopClickListener {
+        void onClick(int position, boolean loop);
+    }
+
+    private LoopClickListener loopClickListener;
+
+    public TextAdapter(List<WordModel> items, LoopClickListener loopClickListener) {
         this.items = items;
+        this.loopClickListener = loopClickListener;
     }
 
     @NonNull
@@ -36,6 +44,7 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
         holder.textView.setText(items.get(position).getWord());
 
         if (selectedPosition == -1) {
+            holder.loopView.setVisibility(View.GONE);
             applyDefaultStyle(holder.textView);
         } else {
             int distance = Math.abs(position - selectedPosition);
@@ -43,18 +52,31 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
                 case 0: // 选中项
                     holder.textView.setTextColor(holder.itemView.getResources().getColor(R.color.black, holder.itemView.getContext().getTheme()));
                     holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    holder.loopView.setVisibility(View.VISIBLE);
+                    holder.loopView.setOnClickListener(v -> {
+                        if (loopClickListener != null) {
+                            loop = !loop;
+
+                            loopClickListener.onClick(holder.getAdapterPosition(), loop);
+                            ((TextView)v).setText(loop?R.string.unloop:R.string.loop);
+                        }
+                    });
                     break;
                 case 1: // 相邻项
                     holder.textView.setTextColor(holder.itemView.getResources().getColor(R.color.gray_8, holder.itemView.getContext().getTheme()));
                     holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    holder.loopView.setVisibility(View.GONE);
                     break;
                 default: // 其他项
+                    holder.loopView.setVisibility(View.GONE);
                     applyDefaultStyle(holder.textView);
             }
         }
+        holder.loopView.setText(loop?R.string.unloop:R.string.loop);
     }
 
     private void applyDefaultStyle(TextView textView) {
+
         textView.setTextColor(textView.getResources().getColor(R.color.gray_a, textView.getContext().getTheme()));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     }
@@ -98,10 +120,12 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
+        TextView loopView;
 
         ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.itemTextView);
+            loopView = itemView.findViewById(R.id.loop_tv);
         }
     }
 }

@@ -21,4 +21,7 @@
     <string name="generate_eng_success">English voice generated successfully!</string>
     <string name="generate_chi_success">Chinese voice generated successfully!</string>
     <string name="import_word_table">Import word table</string>
+    <string name="loop">loop</string>
+    <string name="hello">Hello</string>
+    <string name="unloop">un loop</string>
 </resources>
