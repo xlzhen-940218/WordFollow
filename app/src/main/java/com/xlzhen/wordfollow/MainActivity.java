@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
                     // 设置语言（例如：中文）
-                    int result = textToSpeech.setLanguage(Locale.US);
+                    int result = textToSpeech.setLanguage(Locale.getDefault());
 
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Toast.makeText(MainActivity.this, R.string.tts_data_error, Toast.LENGTH_SHORT).show();
